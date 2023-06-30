@@ -1,5 +1,6 @@
 package com.kadirgurturk.QuizApp.controller;
 
+import com.kadirgurturk.QuizApp.buisness.dto.PostDto;
 import com.kadirgurturk.QuizApp.buisness.request.PostRequests.PostSave;
 import com.kadirgurturk.QuizApp.buisness.request.PostRequests.PostUpdate;
 import com.kadirgurturk.QuizApp.buisness.service.PostService;
@@ -18,7 +19,7 @@ public class PostController {
     private PostService postService;
 
     @GetMapping
-    public List<Post> getAllPosts(@RequestParam Optional<Long> userId)
+    public List<PostDto> getAllPosts(@RequestParam Optional<Long> userId)
     {
         return postService.findAll(userId);
     }

@@ -1,5 +1,6 @@
 package com.kadirgurturk.QuizApp.buisness.service;
 
+import com.kadirgurturk.QuizApp.buisness.dto.CommentDto;
 import com.kadirgurturk.QuizApp.buisness.request.CommentRequests.CommentSave;
 import com.kadirgurturk.QuizApp.buisness.request.CommentRequests.CommentUpdate;
 import com.kadirgurturk.QuizApp.database.CommentRepository;
@@ -10,6 +11,8 @@ import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
+import java.util.stream.StreamSupport;
 
 @Service
 @AllArgsConstructor
@@ -19,17 +22,26 @@ public class CommentService {
     private UserService userService;
     private PostService postService;
 
-    public List<Comment> findAll(Optional<Long> userId, Optional<Long> postId) {
+    public List<CommentDto> findAll(Optional<Long> userId, Optional<Long> postId) {
 
         if(userId.isPresent() && postId.isPresent()){
-            return commentRepository.findByUserIdAndPostId(userId.get(),postId.get());
+            return StreamSupport.stream(commentRepository.findByUserIdAndPostId(userId.get(),postId.get()).spliterator(),false)
+                    .map(CommentDto::new)
+                    .collect(Collectors.toList());
         }else if(userId.isPresent()){
-            return commentRepository.findByUserId(userId.get());
-        }else if(postId.isPresent()){
-            return commentRepository.findByPostId(postId.get());
-        }
 
-        return commentRepository.findAll();
+            return StreamSupport.stream( commentRepository.findByUserId(userId.get()).spliterator(),false)
+                    .map(CommentDto::new)
+                    .collect(Collectors.toList());
+
+        }else if(postId.isPresent()){
+            return StreamSupport.stream(commentRepository.findByPostId(postId.get()).spliterator(),false)
+                    .map(CommentDto::new)
+                    .collect(Collectors.toList());
+        }
+        return StreamSupport.stream(commentRepository.findAll().spliterator(),false)
+                .map(CommentDto::new)
+                .collect(Collectors.toList());
     }
 
     public Comment save(CommentSave newComment) {
@@ -39,7 +51,6 @@ public class CommentService {
         if(user.isPresent() && post.isPresent()){
             var saveComment = new Comment();
             saveComment.setText(newComment.getText());
-            saveComment.setId(newComment.getId());
             saveComment.setPost(post.get());
             saveComment.setUser(user.get());
 
@@ -52,9 +63,11 @@ public class CommentService {
 
     }
 
-    public Optional<Comment> findById(Long CommentId) {
+    public CommentDto findById(Long CommentId) {
 
-        return commentRepository.findById(CommentId);
+        var comment = commentRepository.findById(CommentId).get();
+
+        return new CommentDto(comment);
     }
 
     public void deleteById(Long CommentId) {
@@ -62,7 +75,7 @@ public class CommentService {
         commentRepository.deleteById(CommentId);
     }
 
-    public Comment updateCommentById(Long commentId, CommentUpdate commentUpdate)
+    public CommentDto updateCommentById(Long commentId, CommentUpdate commentUpdate)
     {
         Optional<Comment> foundComment = commentRepository.findById(commentId);
 
@@ -72,7 +85,7 @@ public class CommentService {
 
             commentRepository.save(updateComment);
 
-            return updateComment;
+            return new CommentDto(updateComment);
         }
 
         return null;

@@ -1,5 +1,6 @@
 package com.kadirgurturk.QuizApp.controller;
 
+import com.kadirgurturk.QuizApp.buisness.dto.CommentDto;
 import com.kadirgurturk.QuizApp.buisness.request.CommentRequests.CommentSave;
 import com.kadirgurturk.QuizApp.buisness.request.CommentRequests.CommentUpdate;
 import com.kadirgurturk.QuizApp.buisness.service.CommentService;
@@ -12,16 +13,16 @@ import java.util.List;
 import java.util.Optional;
 
 @RestController
-@RequestMapping("quiz/api/v1/comments")
+@RequestMapping("quiz/api/v1/comments/")
 @AllArgsConstructor
 public class CommentController {
 
     private CommentService commentService;
 
     @GetMapping
-    public List<Comment> getAllComments(
-            @RequestParam Optional<Long> userId,
-            @RequestParam Optional<Long> postId
+    public List<CommentDto> getAllComments(
+            @RequestParam(value = "user") Optional<Long> userId,
+            @RequestParam(value = "post") Optional<Long> postId
             )
     {
         return commentService.findAll(userId,postId);
@@ -34,13 +35,13 @@ public class CommentController {
     }
 
     @GetMapping("/{postId}")
-    public Comment getCommentById(@PathVariable Long postId)
+    public CommentDto getCommentById(@PathVariable Long postId)
     {
-        return commentService.findById(postId).orElseThrow(() -> new RuntimeException("Post blunamado"));
+        return commentService.findById(postId);
     }
 
     @PutMapping("/{postId}")
-    public Comment updateCommentById(@PathVariable Long commentId,@RequestBody CommentUpdate commentUpdate)
+    public CommentDto updateCommentById(@PathVariable Long commentId,@RequestBody CommentUpdate commentUpdate)
     {
         return commentService.updateCommentById(commentId,commentUpdate);
     }

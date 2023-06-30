@@ -1,5 +1,6 @@
 package com.kadirgurturk.QuizApp.buisness.service;
 
+import com.kadirgurturk.QuizApp.buisness.dto.PostDto;
 import com.kadirgurturk.QuizApp.buisness.request.PostRequests.PostSave;
 import com.kadirgurturk.QuizApp.buisness.request.PostRequests.PostUpdate;
 import com.kadirgurturk.QuizApp.database.PostRespository;
@@ -10,6 +11,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Service
 @AllArgsConstructor
@@ -18,13 +20,18 @@ public class PostService {
     private PostRespository postRepository;
     private UserService userService;
 
-    public List<Post> findAll(Optional<Long> userId) {
+    public List<PostDto> findAll(Optional<Long> userId) {
+
+        List<Post> posts;
 
         if(userId.isPresent()){
-            return postRepository.findByUserId(userId.get());
+            posts =  postRepository.findByUserId(userId.get());
         }
 
-        return postRepository.findAll();
+        posts = postRepository.findAll();
+
+        return posts.stream().map(i -> new PostDto(i)).collect(Collectors.toList());
+
     }
 
     public Post save( PostSave postSave) {
@@ -35,7 +42,6 @@ public class PostService {
         Post newPost = new Post();
         newPost.setTitle(postSave.getTitle());
         newPost.setText(postSave.getText());
-        newPost.setId(postSave.getId());
         newPost.setUser(user);
 
         postRepository.save(newPost);
