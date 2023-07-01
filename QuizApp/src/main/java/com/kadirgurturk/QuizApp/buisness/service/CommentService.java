@@ -7,6 +7,7 @@ import com.kadirgurturk.QuizApp.database.CommentRepository;
 import com.kadirgurturk.QuizApp.entity.Comment;
 import com.kadirgurturk.QuizApp.entity.Post;
 import lombok.AllArgsConstructor;
+import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -15,12 +16,17 @@ import java.util.stream.Collectors;
 import java.util.stream.StreamSupport;
 
 @Service
-@AllArgsConstructor
 public class CommentService {
 
     private CommentRepository commentRepository;
     private UserService userService;
     private PostService postService;
+
+    public CommentService(CommentRepository commentRepository, UserService userService, @Lazy  PostService postService) {
+        this.commentRepository = commentRepository;
+        this.userService = userService;
+        this.postService = postService;
+    }
 
     public List<CommentDto> findAll(Optional<Long> userId, Optional<Long> postId) {
 

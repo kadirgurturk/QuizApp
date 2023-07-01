@@ -1,33 +1,83 @@
 package com.kadirgurturk.QuizApp.buisness.service;
 
+import com.kadirgurturk.QuizApp.buisness.dto.CommentDto;
+import com.kadirgurturk.QuizApp.buisness.dto.LikeDto;
+import com.kadirgurturk.QuizApp.buisness.request.LikeRequest.LikeSave;
 import com.kadirgurturk.QuizApp.database.LikeRepository;
 import com.kadirgurturk.QuizApp.database.UserRepository;
+import com.kadirgurturk.QuizApp.entity.Comment;
 import com.kadirgurturk.QuizApp.entity.Like;
 import com.kadirgurturk.QuizApp.entity.User;
 import lombok.AllArgsConstructor;
+import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
+import java.util.stream.StreamSupport;
 
 @Service
-@AllArgsConstructor
+@Lazy
 public class LikeService {
 
     private LikeRepository likeRepository;
+    private UserService userService;
+    private PostService postService;
 
-    public List<Like> findAll() {
-        return likeRepository.findAll();
+    public LikeService(LikeRepository likeRepository, UserService userService, @Lazy PostService postService) {
+        this.likeRepository = likeRepository;
+        this.userService = userService;
+        this.postService = postService;
     }
 
-    public Like save(Like newLike) {
+    public List<LikeDto> findAll(Optional<Long> userId, Optional<Long> postId) {
 
-        return likeRepository.save(newLike);
+        if(userId.isPresent() && postId.isPresent()){
+            return StreamSupport.stream(likeRepository.findByUserIdAndPostId(userId.get(),postId.get()).spliterator(),false)
+                    .map(LikeDto::new)
+                    .collect(Collectors.toList());
+        }else if(userId.isPresent()){
+
+            return StreamSupport.stream( likeRepository.findByUserId(userId.get()).spliterator(),false)
+                    .map(LikeDto::new)
+                    .collect(Collectors.toList());
+
+        }else if(postId.isPresent()){
+            return StreamSupport.stream(likeRepository.findByPostId(postId.get()).spliterator(),false)
+                    .map(LikeDto::new)
+                    .collect(Collectors.toList());
+        }
+        return StreamSupport.stream(likeRepository.findAll().spliterator(),false)
+                .map(LikeDto::new)
+                .collect(Collectors.toList());
     }
 
-    public Optional<Like> findById(Long LikeId) {
+    public LikeSave save(LikeSave newLike) {
 
-        return likeRepository.findById(LikeId);
+        var user = userService.findById(newLike.getUser_id());
+        var post = postService.findById(newLike.getPost_ıd());
+        if(user.isPresent() && post.isPresent()){
+            var like = new Like();
+            like.setPost(post.get());
+            like.setUser(user.get());
+
+            likeRepository.save(like);
+
+            return newLike;
+        }
+
+        return null;
+
+    }
+
+    public LikeDto findById(Long LikeId) {
+
+        if(likeRepository.findById(LikeId).isPresent()){
+            return new LikeDto(likeRepository.findById(LikeId).get());
+        }
+
+        return null;
     }
 
     public void deleteById(Long LikeId) {
