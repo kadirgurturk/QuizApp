@@ -6,6 +6,7 @@ import com.kadirgurturk.QuizApp.security.JwtEntryPoint;
 import lombok.AllArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.http.HttpMethod;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
@@ -45,6 +46,9 @@ public class SecurityConfig {
 
     @Bean
     public CorsFilter corsFilter() {
+
+        // ----> Filtering requests from Cross-Origin
+
         UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
         CorsConfiguration config = new CorsConfiguration();
         config.setAllowCredentials(true);
@@ -58,6 +62,8 @@ public class SecurityConfig {
         config.addAllowedMethod("DELETE");
         config.addAllowedMethod("PATCH");
         source.registerCorsConfiguration("/**", config);
+
+        // --> we allowed all request from cross-orign
         return new CorsFilter(source);
     }
 
@@ -68,7 +74,11 @@ public class SecurityConfig {
                 .exceptionHandling(exception -> exception.authenticationEntryPoint(jwtEntryPoint))
                 .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .authorizeHttpRequests(auth ->
-                        auth.requestMatchers(AUTH_WHITELIST).permitAll()
+                        auth.requestMatchers("/auth/**").permitAll()
+                                .requestMatchers(HttpMethod.GET, "/comments")
+                                .permitAll()
+                                .requestMatchers(HttpMethod.GET, "/posts")
+                                .permitAll()
                                 .anyRequest().authenticated()
                 );
 
@@ -78,12 +88,7 @@ public class SecurityConfig {
 
     }
 
-    private static final String[] AUTH_WHITELIST = {
-            "/posts",
-            "/comments",
-            "/auth/**"
 
-    };
 
 
 }

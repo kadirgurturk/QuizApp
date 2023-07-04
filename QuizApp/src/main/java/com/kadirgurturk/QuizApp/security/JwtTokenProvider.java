@@ -3,14 +3,16 @@ package com.kadirgurturk.QuizApp.security;
 import io.jsonwebtoken.*;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.core.Authentication;
+import org.springframework.stereotype.Component;
 
 import java.util.Date;
 
+@Component
 public class JwtTokenProvider { //-----> We need to generate new token for every response. This class for this.
 
     @Value("${quest.app.key}")
     private String APP_KEY;        //-----> This is a special key for our project
-    @Value("${quest.expıres.tıme}")
+    @Value("${quest.ex}")
     private long EXPIRES_TIME;    // ------> The number that determines the expire time in seconds
 
 
