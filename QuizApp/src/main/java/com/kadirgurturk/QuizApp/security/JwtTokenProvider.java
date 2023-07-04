@@ -6,31 +6,36 @@ import org.springframework.security.core.Authentication;
 
 import java.util.Date;
 
-public class JwtTokenProvider {
+public class JwtTokenProvider { //-----> We need to generate new token for every response. This class for this.
 
     @Value("${quest.app.key}")
-    private String APP_KEY;
+    private String APP_KEY;        //-----> This is a special key for our project
     @Value("${quest.expıres.tıme}")
-    private long EXPIRES_TIME;
+    private long EXPIRES_TIME;    // ------> The number that determines the expire time in seconds
+
+
 
     public String generateToken(Authentication auth)
     {
-        JwtUserDetails userDetails = (JwtUserDetails) auth.getPrincipal();
 
-        Date expiredDate = new Date(new Date().getTime() + EXPIRES_TIME);
+        JwtUserDetails userDetails = (JwtUserDetails) auth.getPrincipal(); //----> auth.getPrincipal function gives us to user who be to authentication.
 
-        return Jwts.builder().setSubject(Long.toString(userDetails.getId()))
-                .setIssuedAt(new Date())
+        Date expiredDate = new Date(new Date().getTime() + EXPIRES_TIME); //------>
+
+        return Jwts.builder()
+                .setSubject(Long.toString(userDetails.getId())) //----> We gave user id as a string to token
+                .setIssuedAt(new Date())   //----->  Token issue date
                 .setExpiration(expiredDate)
-                .signWith(SignatureAlgorithm.HS512, APP_KEY).compact();
+                .signWith(SignatureAlgorithm.HS512, APP_KEY).compact(); // -------> We give a algorithm and key to create new token
     }
 
-    public Long getUserIdFromToken(String token){
-        Claims claims = Jwts.parser().setSigningKey(APP_KEY)
+    public Long getUserIdFromToken(String token){ // ----> This is reverse method od generateToken. We take a token and parse it;
+        Claims claims = Jwts.parser()
+                .setSigningKey(APP_KEY) //---> we are starting to parse jwt
                 .parseClaimsJws(token)
                 .getBody();
 
-        return Long.parseLong(claims.getSubject());
+        return Long.parseLong(claims.getSubject());  //------> we return ıd
     }
 
     public boolean ControlToken(String token){
@@ -55,6 +60,7 @@ public class JwtTokenProvider {
     }
 
     private boolean isTokenExpired(String token) {
+        //We checked here whether it has expired or not.
         Date expiration = Jwts.parser().setSigningKey(APP_KEY).parseClaimsJws(token).getBody().getExpiration();
         return expiration.before(new Date());
     }

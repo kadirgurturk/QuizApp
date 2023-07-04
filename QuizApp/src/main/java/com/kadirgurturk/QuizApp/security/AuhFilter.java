@@ -18,7 +18,7 @@ import org.springframework.web.filter.OncePerRequestFilter;
 import java.io.IOException;
 
 @AllArgsConstructor
-public class AuhFilter extends OncePerRequestFilter {
+public class AuhFilter extends OncePerRequestFilter { //-----> Http isteklerini burada filtreleriz.
 
     JwtTokenProvider jwtTokenProvider;
 
@@ -31,16 +31,19 @@ public class AuhFilter extends OncePerRequestFilter {
 
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
+        // ----> We added new jwt filter to default SpringSecurityfilters with this function.
+
         try {
+            // ---> We need to extract jwt value from HttpRequest, so we write a new function to extract it
             String jwtToken = requestToJwt(request);
 
             if(StringUtils.hasText(jwtToken) && jwtTokenProvider.ControlToken(jwtToken)){
 
-                Long id = jwtTokenProvider.getUserIdFromToken(jwtToken);
-                UserDetails user = userDetailServiceImp.loadUserById(id);
+                Long id = jwtTokenProvider.getUserIdFromToken(jwtToken); //----> we get user_id of owner jwt
+                UserDetails user = userDetailServiceImp.loadUserById(id); //---> we get userDetails by using userDetails
 
                 if(user != null){
-                    UsernamePasswordAuthenticationToken auth = new UsernamePasswordAuthenticationToken(user, null, user.getAuthorities());
+                    UsernamePasswordAuthenticationToken auth = new UsernamePasswordAuthenticationToken(user, null, user.getAuthorities()); //---> This class let us to authenticate to user
                     auth.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
                     SecurityContextHolder.getContext().setAuthentication(auth);
 
@@ -54,9 +57,10 @@ public class AuhFilter extends OncePerRequestFilter {
     }
 
     private String requestToJwt(HttpServletRequest request) {
-        String bearer = request.getHeader("Authorization");
-        if(StringUtils.hasText(bearer) && bearer.startsWith("Bearer")){
-            return bearer.substring("Bearer" .length() + 1);
+
+        String bearer = request.getHeader("Authorization"); // ---> We get auth from http request
+        if(StringUtils.hasText(bearer) && bearer.startsWith("Bearer")){ //--> Every jwt token start with bearer, so we checked it
+            return bearer.substring("Bearer" .length() + 1); // ---> we return string value after bearer which is also our JWT token.
         }
 
         return null;
