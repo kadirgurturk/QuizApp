@@ -36,17 +36,13 @@ public class AuhFilter extends OncePerRequestFilter { //-----> Http isteklerini 
         try {
             // ---> We need to extract jwt value from HttpRequest, so we write a new function to extract it
             String jwtToken = requestToJwt(request);
-
-            if(StringUtils.hasText(jwtToken) && jwtTokenProvider.ControlToken(jwtToken)){
-
-                Long id = jwtTokenProvider.getUserIdFromToken(jwtToken); //----> we get user_id of owner jwt
-                UserDetails user = userDetailServiceImp.loadUserById(id); //---> we get userDetails by using userDetails
-
-                if(user != null){
-                    UsernamePasswordAuthenticationToken auth = new UsernamePasswordAuthenticationToken(user, null, user.getAuthorities()); //---> This class let us to authenticate to user
+            if(StringUtils.hasText(jwtToken) && jwtTokenProvider.ControlToken(jwtToken)) {
+                Long id = jwtTokenProvider.getUserIdFromToken(jwtToken);
+                UserDetails user = userDetailServiceImp.loadUserById(id);
+                if(user != null) {
+                    UsernamePasswordAuthenticationToken auth = new UsernamePasswordAuthenticationToken(user, null, user.getAuthorities());
                     auth.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
                     SecurityContextHolder.getContext().setAuthentication(auth);
-
                 }
 
             }
@@ -58,11 +54,9 @@ public class AuhFilter extends OncePerRequestFilter { //-----> Http isteklerini 
 
     private String requestToJwt(HttpServletRequest request) {
 
-        String bearer = request.getHeader("Authorization"); // ---> We get auth from http request
-        if(StringUtils.hasText(bearer) && bearer.startsWith("Bearer")){ //--> Every jwt token start with bearer, so we checked it
-            return bearer.substring("Bearer" .length() + 1); // ---> we return string value after bearer which is also our JWT token.
-        }
-
+        String bearer = request.getHeader("Authorization");
+        if(StringUtils.hasText(bearer) && bearer.startsWith("Bearer "))
+            return bearer.substring(7);
         return null;
 
     }

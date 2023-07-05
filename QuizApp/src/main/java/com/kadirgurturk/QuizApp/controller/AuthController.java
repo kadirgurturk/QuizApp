@@ -18,7 +18,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
-@RequestMapping("/auth")
+@RequestMapping("quiz/api/v1/auth")
 @AllArgsConstructor
 public class AuthController {
 
@@ -40,7 +40,7 @@ public class AuthController {
 
         String jwtToken = jwtTokenProvider.generateToken(auth);
 
-        return "Bearer" + jwtToken;
+        return "Bearer " + jwtToken;
 
     }
 

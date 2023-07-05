@@ -8,6 +8,7 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpMethod;
 import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.AuthenticationProvider;
 import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
@@ -74,13 +75,15 @@ public class SecurityConfig {
                 .exceptionHandling(exception -> exception.authenticationEntryPoint(jwtEntryPoint))
                 .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .authorizeHttpRequests(auth ->
-                        auth.requestMatchers("/auth/**").permitAll()
-                                .requestMatchers(HttpMethod.GET, "/comments")
+                        auth.requestMatchers("/quiz/api/v1/auth/**").permitAll()
+                                .requestMatchers(HttpMethod.GET, "/quiz/api/v1/comments")
                                 .permitAll()
-                                .requestMatchers(HttpMethod.GET, "/posts")
+                                .requestMatchers(HttpMethod.GET, "/quiz/api/v1/posts")
                                 .permitAll()
                                 .anyRequest().authenticated()
                 );
+
+
 
         httpSecurity.addFilterBefore(jwtAuthenticationFilter(), UsernamePasswordAuthenticationFilter.class);
 
