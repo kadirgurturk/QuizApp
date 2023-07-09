@@ -3,6 +3,8 @@ package com.kadirgurturk.QuizApp.security;
 import io.jsonwebtoken.*;
 import io.jsonwebtoken.io.Decoders;
 import io.jsonwebtoken.security.Keys;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Component;
@@ -13,6 +15,8 @@ import java.util.Date;
 
 @Component
 public class JwtTokenProvider { //-----> We need to generate new token for every response. This class for this.
+
+    private static final Logger logger = LoggerFactory.getLogger(JwtTokenProvider.class);
 
     @Value("${quest.app.key}")
     private String APP_KEY;        //-----> This is a special key for our project
@@ -39,8 +43,7 @@ public class JwtTokenProvider { //-----> We need to generate new token for every
 
 
     private Key key() {
-        byte[] keyBytes = Decoders.BASE64.decode(APP_KEY);
-        return Keys.hmacShaKeyFor(keyBytes);
+        return Keys.hmacShaKeyFor(Decoders.BASE64.decode(APP_KEY));
     }
 
     public Long getUserIdFromToken(String token){ // ----> This is reverse method od generateToken. We take a token and parse it;
@@ -50,8 +53,6 @@ public class JwtTokenProvider { //-----> We need to generate new token for every
                 .parseClaimsJws(token)
                 .getBody();
 
-        System.out.println(Long.parseLong(claims.getSubject()));
-
         return Long.parseLong(claims.getSubject());  //------> we return ıd
     }
 
@@ -60,17 +61,19 @@ public class JwtTokenProvider { //-----> We need to generate new token for every
 
         try {
             Jwts.parserBuilder().setSigningKey(key()).build().parse(token);
-
-            return !isTokenExpired(token);  //----> Token hala geçerli olup olmadğına bakılır
+            return true;
         } catch (MalformedJwtException e) {
-            return false;
+            logger.error("Invalid JWT token: {}", e.getMessage());
         } catch (ExpiredJwtException e) {
-            return false;
+            logger.error("JWT token is expired: {}", e.getMessage());
         } catch (UnsupportedJwtException e) {
-            return false;
+            logger.error("JWT token is unsupported: {}", e.getMessage());
         } catch (IllegalArgumentException e) {
-            return false;
+            logger.error("JWT claims string is empty: {}", e.getMessage());
         }
+
+        return false;
+
 
     }
 
@@ -78,6 +81,11 @@ public class JwtTokenProvider { //-----> We need to generate new token for every
         //We checked here whether it has expired or not.
         Date expiration =  Jwts.parserBuilder().setSigningKey(key()).build().parseClaimsJws(token).getBody().getExpiration();
         return expiration.before(new Date());
+    }
+
+    public void test()
+    {
+        System.out.println("kadir baba");
     }
 
 }

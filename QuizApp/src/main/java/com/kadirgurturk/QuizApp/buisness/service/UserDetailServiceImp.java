@@ -26,6 +26,10 @@ public class UserDetailServiceImp implements UserDetailsService {
         return JwtUserDetails.create(user);
     }
 
+    public void userTest(){
+        System.out.println("sadas");
+    }
+
     public UserDetails loadUserById(Long id) {
         User user = userRepository.findById(id)
                 .orElseThrow(() -> new UsernameNotFoundException("User Not Found with user: " ));

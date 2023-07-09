@@ -33,6 +33,17 @@ public class JwtUserDetails implements UserDetails {
         return new JwtUserDetails(user.getId(), user.getUserName(), user.getPassword(), authoritiesList);
     }
 
+    public String getUsername() {
+        return username;
+    }
+
+    public String getPassword() {
+        return password;
+    }
+
+    public Collection<? extends GrantedAuthority> getAuthorities() {
+        return authorities;
+    }
 
     @Override
     public boolean isAccountNonExpired() {
