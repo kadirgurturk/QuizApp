@@ -12,7 +12,7 @@ import java.util.List;
 import java.util.Optional;
 
 @RestController
-@RequestMapping("quiz/api/v1/posts")
+@RequestMapping("quiz/api/v1/posts/")
 @AllArgsConstructor
 public class PostController {
 

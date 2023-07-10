@@ -32,12 +32,8 @@ public class AuhFilter extends OncePerRequestFilter { //-----> Http isteklerini 
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
         // ----> We added new jwt filter to default SpringSecurityfilters with this function.
 
-        userDetailServiceImp.userTest();
-
         String jwtToken = requestToJwt(request);
-        if(StringUtils.hasText(jwtToken)){
-            jwtTokenProvider.test();
-        }
+
          {
             // ---> We need to extract jwt value from HttpRequest, so we write a new function to extract it
 

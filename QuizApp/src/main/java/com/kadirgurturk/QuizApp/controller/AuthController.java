@@ -1,5 +1,6 @@
 package com.kadirgurturk.QuizApp.controller;
 
+import com.kadirgurturk.QuizApp.buisness.request.AuthRequest.AuthResponse;
 import com.kadirgurturk.QuizApp.buisness.request.UserRequest.UserRequest;
 import com.kadirgurturk.QuizApp.buisness.service.UserService;
 import com.kadirgurturk.QuizApp.entity.User;
@@ -31,7 +32,7 @@ public class AuthController {
     private PasswordEncoder passwordEncoder;
 
     @PostMapping("/login")
-    public String login(@RequestBody UserRequest loginRequest){
+    public AuthResponse login(@RequestBody UserRequest loginRequest){
 
         UsernamePasswordAuthenticationToken authToken = new UsernamePasswordAuthenticationToken(loginRequest.getUserName(),loginRequest.getPassword());
         Authentication auth = authenticationManager.authenticate(authToken);
@@ -40,7 +41,13 @@ public class AuthController {
 
         String jwtToken = jwtTokenProvider.generateToken(auth);
 
-        return "Bearer " + jwtToken;
+        User user = userService.findByName(loginRequest.getUserName()).get();
+
+        AuthResponse authResponse = new AuthResponse();
+        authResponse.setMessege("Bearer " + jwtToken);
+        authResponse.setUserId(user.getId());
+
+        return authResponse;
 
     }
 

@@ -55,16 +55,21 @@ public class LikeService {
 
     public LikeSave save(LikeSave newLike) {
 
+
+
         var user = userService.findById(newLike.getUser_id());
         var post = postService.findById(newLike.getPost_ıd());
         if(user.isPresent() && post.isPresent()){
-            var like = new Like();
-            like.setPost(post.get());
-            like.setUser(user.get());
 
-            likeRepository.save(like);
+            if(findAll(Optional.of(user.get().getId()),Optional.of(post.get().getId())).isEmpty()){
+                var like = new Like();
+                like.setPost(post.get());
+                like.setUser(user.get());
 
-            return newLike;
+                likeRepository.save(like);
+
+                return newLike;
+            }
         }
 
         return null;
@@ -83,6 +88,10 @@ public class LikeService {
     public void deleteById(Long LikeId) {
 
         likeRepository.deleteById(LikeId);
+    }
+
+    public void deleteByPostIdAndUserId(Long postId, Long userId){
+        likeRepository.deleteByPostIdAndUserId(postId,userId);
     }
 
 }

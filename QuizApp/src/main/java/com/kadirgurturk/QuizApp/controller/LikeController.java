@@ -5,6 +5,7 @@ import com.kadirgurturk.QuizApp.buisness.request.LikeRequest.LikeSave;
 import com.kadirgurturk.QuizApp.buisness.service.LikeService;
 import com.kadirgurturk.QuizApp.entity.Like;
 import lombok.AllArgsConstructor;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -43,6 +44,17 @@ public class LikeController {
     public void deleteOneLike(@PathVariable Long likeId)
     {
         likeService.deleteById(likeId);
+    }
+
+    @DeleteMapping
+    public ResponseEntity<?> deleteByPostIdAndUserId(
+            @RequestParam(value = "user") Long userId,
+            @RequestParam(value = "post") Long postId
+    )
+    {
+        likeService.deleteByPostIdAndUserId(postId,userId);
+
+        return ResponseEntity.ok("Silinid" + postId + " " + userId);
     }
 
 
