@@ -8,6 +8,7 @@ public class CommentDto {
 
     Long id;
     Long userId;
+    Integer avatarId;
     String userName;
     Long postId;
     String text;
@@ -15,6 +16,7 @@ public class CommentDto {
     public CommentDto(Comment entity) {
         id = entity.getId();
         userId = entity.getUser().getId();
+        avatarId = entity.getUser().getAvatar_id();
         userName = entity.getUser().getUserName();
         postId = entity.getPost().getId();
         text = entity.getText();

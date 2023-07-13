@@ -62,6 +62,8 @@ public class AuthController {
             user.setUserName(register.getUserName());
 
             user.setPassword(passwordEncoder.encode(register.getPassword()));
+
+            user.setAvatar_id(0);
             userService.save(user);
             return new ResponseEntity<>("User succesfuly registered", HttpStatus.CREATED);
 

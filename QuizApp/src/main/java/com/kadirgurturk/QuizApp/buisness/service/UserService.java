@@ -40,6 +40,20 @@ public class UserService {
         userRepository.deleteById(userId);
     }
 
+    public User updateAvatarById(Long userId, Integer avatarId){
+        Optional<User> userFound = userRepository.findById(userId);
+        if(userFound.isPresent()){
+            var userNew = userFound.get();
+
+            userNew.setAvatar_id(avatarId);
+
+            userRepository.save(userNew);
+            return userNew;
+        }else {
+            return null;
+        }
+    }
+
     public User updateUserById(Long userId, User user)
     {
         Optional<User> userFound = userRepository.findById(userId);
@@ -47,6 +61,7 @@ public class UserService {
             var userNew = userFound.get();
             userNew.setUserName(user.getUserName());
             userNew.setPassword(user.getPassword());
+            userNew.setAvatar_id(user.getAvatar_id());
             userRepository.save(userNew);
             return userNew;
         }else {

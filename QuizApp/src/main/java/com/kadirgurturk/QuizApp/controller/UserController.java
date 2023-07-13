@@ -38,6 +38,12 @@ public class UserController {
         return userService.updateUserById(userId,user);
     }
 
+    @PutMapping
+    public User updateAvatarById(@RequestParam("userid") Long userId,@RequestParam("avatarId") Integer avatarId)
+    {
+        return userService.updateAvatarById(userId,avatarId);
+    }
+
     @DeleteMapping("/{userId}")
     public void deleteOneUser(@PathVariable Long userId)
     {

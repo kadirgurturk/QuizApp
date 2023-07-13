@@ -15,4 +15,6 @@ public class User {
     String userName;
 
     String password;
+
+    Integer avatar_id;
 }
