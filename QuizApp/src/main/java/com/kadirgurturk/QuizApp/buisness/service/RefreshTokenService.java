@@ -3,7 +3,7 @@ package com.kadirgurturk.QuizApp.buisness.service;
 import com.kadirgurturk.QuizApp.database.RefreshTokenRepository;
 import com.kadirgurturk.QuizApp.entity.RefreshToken;
 import com.kadirgurturk.QuizApp.entity.User;
-import lombok.Value;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import java.time.Instant;
 import java.util.Date;
@@ -14,8 +14,8 @@ import java.util.Date;
 @Service
 public class RefreshTokenService {
 
-    @Value("${refresh.token.val}")
-    Long expireSeconds;
+    @Value("${quest.refresh.token}")
+    private long expireSeconds;
 
     private RefreshTokenRepository refreshTokenRepository;
 

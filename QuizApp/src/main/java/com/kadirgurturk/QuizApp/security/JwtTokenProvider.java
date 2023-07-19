@@ -10,7 +10,6 @@ import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Component;
 
 import java.security.Key;
-import java.util.Base64;
 import java.util.Date;
 
 @Component
@@ -39,6 +38,16 @@ public class JwtTokenProvider { //-----> We need to generate new token for every
                 .signWith(key(),SignatureAlgorithm.HS256)
                 .compact();
                 //.signWith(SignatureAlgorithm.HS512, APP_KEY).compact(); // -------> We give a algorithm and key to create new token
+    }
+
+    public String generateJwtTokenByUserId(Long userId) {
+        Date expireDate = new Date(new Date().getTime() + EXPIRES_TIME);
+        return Jwts.builder()
+                .setSubject(Long.toString(userId))
+                .setIssuedAt(new Date())
+                .setExpiration(expireDate)
+                .signWith(key(),SignatureAlgorithm.HS256)
+                .compact();
     }
 
 
