@@ -1,0 +1,46 @@
+@use "../../mixin" as m;
+@use "../../variable" as v;
+@use "../../responsive" as r;
+
+
+.user{
+    margin-top: 50px;
+    @include m.flex_column;
+    align-items: center;
+    justify-content: space-around;
+    .profile-card{
+        margin-bottom: 195px;
+        background-color:  azure;
+        width: 380px;
+        height: 48vh;
+        @include m.flex_column;
+        justify-content: space-around;
+        align-items: center;
+        border: 2px solid v.$primary-blue;
+        border-radius: 35px;
+        .profile-card-pp{
+            width: 150px;
+            height: 150px;
+        }
+        .profile-card-name{
+            background-color: white;
+            padding: 10px 22px;
+            border-radius: 15px;
+            border: 1px solid v.$primary-blue;
+        }
+
+        .avatar-button{
+            padding: 13px 13px;
+            background-color: white;
+            border-radius: 15px;
+            border: 2px solid v.$primary-blue;
+            &:hover{
+                background-color: v.$primary-blue;
+                cursor: pointer;
+                color: white;
+            }
+        }
+    }
+    
+
+}

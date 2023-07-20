@@ -10,6 +10,7 @@ import org.springframework.data.repository.query.Param;
 
 import java.util.List;
 
+@Transactional
 public interface LikeRepository extends JpaRepository<Like, Long> {
 
     List<Like> findByUserIdAndPostId(Long userId, Long postId);

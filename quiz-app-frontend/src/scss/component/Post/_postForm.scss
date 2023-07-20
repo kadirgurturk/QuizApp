@@ -1,0 +1,96 @@
+@use "../../mixin" as m;
+@use "../../variable" as v;
+@use "../../responsive" as r;
+
+
+.postForm{
+    position: relative;
+    border-radius: 15px;
+    width: 70%;
+    height: 255px;
+    background-color: azure;
+    margin-bottom: 55px;
+    .post-popup{
+        @include m.flex_row;
+        align-items: center;
+        justify-content: center;
+        position: absolute;
+        box-shadow: 0px 0px 10px -5px rgba(0,0,0,0.75);
+        top: 225px;
+        left: 22%;
+        width: 50%;
+        height: 45px;
+        border-radius: 35px;
+        background-color: rgb(70, 198, 70);
+        color: white;
+        font-weight: 600;
+        z-index: 4;
+        img{
+            margin-right: 15px;
+        }
+    }
+    .pp{
+        position: absolute;
+        height: 36px;
+        width: 36px;
+        background-color: v.$primary-red;
+        border-radius: 50%;
+        z-index: 2;
+        left: 15px;
+        top: 20px;
+        @include m.center;
+        font-weight: 700;
+        color: white;
+        cursor: pointer;
+    }
+
+    #title-input{
+        position: absolute;
+        top: 25px;
+        left: 100px;
+        height: 42px;
+        width: 70%;
+        border: 1px solid lightblue;
+        border-radius: 15px;
+        padding-left: 15px;
+        &:focus{
+            outline: none;
+            border: 2px solid rgb(19, 176, 229);
+        }
+    }
+
+    #text-input{
+        position: absolute;
+        resize: none;
+        top: 85px;
+        left: 25px;
+        width: 90%;
+        height: 110px;
+        padding: 15px;
+        border: 1px solid lightblue;
+        border-radius: 15px;
+        &:focus{
+            outline: none;
+            border: 2px solid rgb(19, 176, 229);
+        }
+    }
+
+    #post-btn{
+        position: absolute;
+        bottom: 20px;
+        right: 27px;
+        height: 25px;
+        padding: 13px 13px;
+        @include m.center;
+        background-color: white;
+        border-radius: 15px;
+        border: 2px solid v.$primary-blue;
+        &:hover{
+            background-color: v.$primary-blue;
+            cursor: pointer;
+            color: white;
+        }
+    }
+
+
+}

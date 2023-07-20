@@ -9,12 +9,18 @@ public class LikeDto {
 
     Long id;
     Long userId;
+    String title;
+    String text;
+    Integer avatarId;
     String userName;
     Long postId;
 
     public LikeDto(Like entity) {
         id = entity.getId();
-        userId = entity.getUser().getId();
+        userId = entity.getPost().getUser().getId();
+        title = entity.getPost().getTitle();
+        text = entity.getPost().getText();
+        avatarId = entity.getPost().getUser().getAvatar_id();
         userName = entity.getUser().getUserName();
         postId = entity.getPost().getId();
 

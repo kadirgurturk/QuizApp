@@ -2,6 +2,7 @@ package com.kadirgurturk.QuizApp.buisness.service;
 
 import com.kadirgurturk.QuizApp.database.UserRepository;
 import com.kadirgurturk.QuizApp.entity.User;
+import jakarta.transaction.Transactional;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -10,6 +11,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import java.util.List;
 import java.util.Optional;
 
+@Transactional
 @Service
 @AllArgsConstructor
 public class UserService {

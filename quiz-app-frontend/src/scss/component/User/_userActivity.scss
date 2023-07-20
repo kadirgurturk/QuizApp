@@ -1,0 +1,39 @@
+@use "../../mixin" as m;
+@use "../../variable" as v;
+@use "../../responsive" as r;
+
+
+.user-activity{
+    @include m.flex_column;
+    align-items: center;
+    .user-activity-navbar{
+        @include m.flex_row;
+        align-items: center;
+        justify-content: space-around;
+        width: 80vw;
+        height: 85px;
+        border: 3px solid v.$primary-blue;
+        border-radius: 28px;
+        font-weight: 500;
+        font-size: 20px;
+        letter-spacing: 2px;
+        .lists{
+            padding: 15px 25px;
+            border: 3px solid white;
+            cursor: pointer;
+            &:hover{
+                padding: 15px 25px;
+                border: 3px solid lightblue;
+                border-radius: 28px;
+            }
+        }
+        .selected-lists{
+            cursor: pointer;
+            padding: 15px 25px;
+            color: white;
+            background-color: v.$primary-blue;
+            border-radius: 28px;
+        }
+
+    }
+}

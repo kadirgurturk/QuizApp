@@ -8,6 +8,7 @@ import com.kadirgurturk.QuizApp.database.UserRepository;
 import com.kadirgurturk.QuizApp.entity.Comment;
 import com.kadirgurturk.QuizApp.entity.Like;
 import com.kadirgurturk.QuizApp.entity.User;
+import jakarta.transaction.Transactional;
 import lombok.AllArgsConstructor;
 import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Service;
@@ -17,6 +18,7 @@ import java.util.Optional;
 import java.util.stream.Collectors;
 import java.util.stream.StreamSupport;
 
+@Transactional
 @Service
 @Lazy
 public class LikeService {

@@ -1,0 +1,636 @@
+@import url("https://fonts.googleapis.com/css2?family=Lexend+Deca:wght@400;500;600&display=swap");
+@import url("https://fonts.googleapis.com/css2?family=Space+Mono:wght@400;700&display=swap");
+.navbar {
+  position: sticky;
+  box-shadow: -1px 5px 10px 0px rgb(212, 212, 212);
+  width: 100vw;
+  height: 80px;
+  background-color: rgb(42, 131, 255);
+  border-radius: 0 0 10px 10px;
+}
+.navbar ul {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  flex-direction: row;
+  justify-content: space-around;
+  align-items: center;
+  list-style: none;
+}
+.navbar ul .quit-user {
+  width: 10%;
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: center;
+}
+.navbar ul .quit-user img {
+  cursor: pointer;
+}
+.navbar ul a {
+  font-size: 1.3rem;
+  font-weight: 500;
+  text-decoration: none;
+  color: white;
+}
+
+.postList {
+  margin-top: 0;
+  padding: 70px 0 50px 0;
+  background-color: rgb(108, 196, 255);
+  display: flex;
+  flex-direction: column;
+  justify-content: space-around;
+  align-items: center;
+  width: 790px;
+}
+.postList .postCard {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-around;
+  align-items: center;
+  border-radius: 15px;
+  width: 70%;
+  min-height: 215px;
+  background-color: azure;
+  margin-bottom: 55px;
+}
+.postList .postCard .pp {
+  position: absolute;
+  height: 36px;
+  width: 36px;
+  border-radius: 50%;
+  z-index: 2;
+  left: 15px;
+  top: 20px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  font-weight: 700;
+  color: white;
+  cursor: pointer;
+}
+.postList .postCard .pp img {
+  height: 100%;
+  width: 100%;
+}
+.postList .postCard h3 {
+  position: absolute;
+  font-weight: 500;
+  font-size: 16px;
+  left: 100px;
+  top: 25px;
+}
+.postList .postCard .post-text {
+  position: absolute;
+  top: 75px;
+  left: 30px;
+}
+.postList .postCard #like {
+  position: absolute;
+  top: 170px;
+  left: 20px;
+}
+.postList .postCard #like:hover {
+  cursor: pointer;
+  opacity: 0.6;
+}
+.postList .postCard #likes {
+  position: absolute;
+  top: 170px;
+  left: 55px;
+}
+.postList .postCard .commentImg {
+  position: absolute;
+  top: 170px;
+  right: 20px;
+  opacity: 0.4;
+}
+.postList .postCard .commentImg:hover {
+  opacity: 0.75;
+  cursor: pointer;
+}
+.postList .postCard .activeCommentImg {
+  position: absolute;
+  top: 170px;
+  right: 20px;
+  opacity: 1;
+}
+.postList .postCard .activeCommentImg:hover {
+  opacity: 0.75;
+  cursor: pointer;
+}
+
+.postForm {
+  position: relative;
+  border-radius: 15px;
+  width: 70%;
+  height: 255px;
+  background-color: azure;
+  margin-bottom: 55px;
+}
+.postForm .post-popup {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: center;
+  position: absolute;
+  box-shadow: 0px 0px 10px -5px rgba(0, 0, 0, 0.75);
+  top: 225px;
+  left: 22%;
+  width: 50%;
+  height: 45px;
+  border-radius: 35px;
+  background-color: rgb(70, 198, 70);
+  color: white;
+  font-weight: 600;
+  z-index: 4;
+}
+.postForm .post-popup img {
+  margin-right: 15px;
+}
+.postForm .pp {
+  position: absolute;
+  height: 36px;
+  width: 36px;
+  background-color: #D4403A;
+  border-radius: 50%;
+  z-index: 2;
+  left: 15px;
+  top: 20px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  font-weight: 700;
+  color: white;
+  cursor: pointer;
+}
+.postForm #title-input {
+  position: absolute;
+  top: 25px;
+  left: 100px;
+  height: 42px;
+  width: 70%;
+  border: 1px solid lightblue;
+  border-radius: 15px;
+  padding-left: 15px;
+}
+.postForm #title-input:focus {
+  outline: none;
+  border: 2px solid rgb(19, 176, 229);
+}
+.postForm #text-input {
+  position: absolute;
+  resize: none;
+  top: 85px;
+  left: 25px;
+  width: 90%;
+  height: 110px;
+  padding: 15px;
+  border: 1px solid lightblue;
+  border-radius: 15px;
+}
+.postForm #text-input:focus {
+  outline: none;
+  border: 2px solid rgb(19, 176, 229);
+}
+.postForm #post-btn {
+  position: absolute;
+  bottom: 20px;
+  right: 27px;
+  height: 25px;
+  padding: 13px 13px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  background-color: white;
+  border-radius: 15px;
+  border: 2px solid rgb(42, 131, 255);
+}
+.postForm #post-btn:hover {
+  background-color: rgb(42, 131, 255);
+  cursor: pointer;
+  color: white;
+}
+
+.comment-form {
+  position: relative;
+  border-radius: 15px;
+  width: 100%;
+  height: 145px;
+  border: 2px solid rgb(108, 196, 255);
+  background-color: rgb(255, 255, 255);
+  margin-bottom: 25px;
+}
+.comment-form .pp-comment {
+  position: absolute;
+  height: 36px;
+  width: 36px;
+  background-color: #D4403A;
+  border-radius: 50%;
+  z-index: 2;
+  right: 47px;
+  top: 25px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  font-weight: 700;
+  color: white;
+  cursor: pointer;
+}
+.comment-form .comment-text {
+  position: absolute;
+  resize: none;
+  padding: 10px;
+  top: 15px;
+  left: 15px;
+  height: 80%;
+  width: 70%;
+  border: 1px solid lightblue;
+  border-radius: 15px;
+  padding-left: 15px;
+}
+.comment-form .comment-text:focus {
+  outline: none;
+  border: 2px solid rgb(19, 176, 229);
+}
+.comment-form #post-btn {
+  position: absolute;
+  bottom: 20px;
+  right: 27px;
+  height: 25px;
+  padding: 13px 13px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  background-color: white;
+  border-radius: 15px;
+  border: 2px solid rgb(42, 131, 255);
+}
+.comment-form #post-btn:hover {
+  background-color: rgb(42, 131, 255);
+  cursor: pointer;
+  color: white;
+}
+
+.commentList {
+  position: relative;
+  bottom: -50px;
+  left: -10px;
+  margin-top: 0;
+  padding: 20px 30px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-around;
+  align-items: center;
+  width: 90%;
+  margin-top: 165px;
+  margin-bottom: 25px;
+}
+.commentList .commentCard {
+  position: relative;
+  border-radius: 15px;
+  width: 100%;
+  height: 105px;
+  margin-top: 25px;
+  margin-bottom: 25px;
+  border: 2px solid rgb(108, 196, 255);
+  background-color: rgb(255, 255, 255);
+}
+.commentList .commentCard .pp {
+  position: absolute;
+  left: 12px;
+  top: 17px;
+  height: 36px;
+  width: 36px;
+  border-radius: 50%;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  font-weight: 700;
+  color: white;
+  cursor: pointer;
+}
+.commentList .commentCard .pp img {
+  height: 100%;
+  width: 100%;
+}
+.commentList .commentCard .comment-text {
+  position: absolute;
+  width: 80%;
+  height: 70%;
+  left: 75px;
+  top: 20px;
+}
+
+.user {
+  margin-top: 50px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: space-around;
+}
+.user .profile-card {
+  margin-bottom: 195px;
+  background-color: azure;
+  width: 380px;
+  height: 48vh;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-around;
+  align-items: center;
+  border: 2px solid rgb(42, 131, 255);
+  border-radius: 35px;
+}
+.user .profile-card .profile-card-pp {
+  width: 150px;
+  height: 150px;
+}
+.user .profile-card .profile-card-name {
+  background-color: white;
+  padding: 10px 22px;
+  border-radius: 15px;
+  border: 1px solid rgb(42, 131, 255);
+}
+.user .profile-card .avatar-button {
+  padding: 13px 13px;
+  background-color: white;
+  border-radius: 15px;
+  border: 2px solid rgb(42, 131, 255);
+}
+.user .profile-card .avatar-button:hover {
+  background-color: rgb(42, 131, 255);
+  cursor: pointer;
+  color: white;
+}
+
+.popup {
+  position: fixed;
+  z-index: 4;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  background-color: rgba(0, 0, 0, 0.8);
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+.popup .avatar-menu {
+  height: 380px;
+  width: 60%;
+  box-shadow: 0px 0px 3px 0px rgb(179, 179, 179);
+  background-color: white;
+  font-family: "Lexend Deca", sans-serif;
+  font-weight: 500;
+  font-size: 13px;
+  line-height: 20px;
+  border-radius: 13px;
+  border: 2px solid rgb(42, 131, 255);
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+.popup .avatar-menu .logos {
+  width: 90%;
+  height: 90%;
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(80px, 1fr));
+  grid-gap: 5px;
+}
+.popup .avatar-menu .logos .avatar-menu-logo {
+  height: 65px;
+  width: 65px;
+  border: 1px solid lightblue;
+  border-radius: 50%;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+.popup .avatar-menu .logos .avatar-menu-logo:hover {
+  cursor: pointer;
+  border: 1px solid rgb(42, 131, 255);
+}
+.popup .avatar-menu .logos .avatar-menu-logo .avatar-menu-pp {
+  width: 90%;
+  height: 90%;
+  opacity: 0.3;
+}
+.popup .avatar-menu .logos .avatar-menu-logo .avatar-menu-pp:hover {
+  opacity: 0.8;
+}
+.popup .avatar-menu .logos .avatar-menu-logo-active {
+  height: 65px;
+  width: 65px;
+  border: 1px solid rgb(42, 131, 255);
+  border-radius: 50%;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+.popup .avatar-menu .logos .avatar-menu-logo-active:hover {
+  cursor: pointer;
+}
+.popup .avatar-menu .logos .avatar-menu-logo-active .avatar-menu-pp {
+  width: 90%;
+  height: 90%;
+  opacity: 1;
+}
+
+.user-activity {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+.user-activity .user-activity-navbar {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: space-around;
+  width: 80vw;
+  height: 85px;
+  border: 3px solid rgb(42, 131, 255);
+  border-radius: 28px;
+  font-weight: 500;
+  font-size: 20px;
+  letter-spacing: 2px;
+}
+.user-activity .user-activity-navbar .lists {
+  padding: 15px 25px;
+  border: 3px solid white;
+  cursor: pointer;
+}
+.user-activity .user-activity-navbar .lists:hover {
+  padding: 15px 25px;
+  border: 3px solid lightblue;
+  border-radius: 28px;
+}
+.user-activity .user-activity-navbar .selected-lists {
+  cursor: pointer;
+  padding: 15px 25px;
+  color: white;
+  background-color: rgb(42, 131, 255);
+  border-radius: 28px;
+}
+
+.Auth {
+  margin-top: 80px;
+  width: 428px;
+  height: 309px;
+  box-shadow: 0px 0px 3px 0px rgb(179, 179, 179);
+  background-color: white;
+  font-family: "Lexend Deca", sans-serif;
+  font-weight: 500;
+  font-size: 13px;
+  line-height: 20px;
+  border-radius: 13px;
+  z-index: 5;
+  border: 2px solid rgb(42, 131, 255);
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+.Auth .Auth-form {
+  width: 100%;
+  height: 100%;
+  padding-bottom: 90px;
+  padding-top: 15px;
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-around;
+  align-items: center;
+}
+.Auth .Auth-form input {
+  width: 314px;
+  height: 45px;
+  border: 1px solid lightblue;
+  border-radius: 38px;
+  outline: none;
+  padding-left: 15px;
+}
+.Auth .Auth-form input:focus {
+  outline-color: rgb(42, 131, 255);
+  border-color: rgb(42, 131, 255);
+}
+.Auth .Auth-form .form_btn {
+  outline: none;
+  border: none;
+  width: 82.76px;
+  height: 37.02px;
+  border-radius: 34px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+.Auth .Auth-form .form_btn:hover {
+  background-color: rgb(42, 131, 255);
+  cursor: pointer;
+  color: white;
+}
+.Auth .Auth-form #login-btn {
+  position: absolute;
+  right: 35px;
+  bottom: 30px;
+}
+.Auth .Auth-form #register-btn {
+  position: absolute;
+  left: 35px;
+  bottom: 30px;
+}
+
+.popup {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  background-color: rgba(0, 0, 0, 0.8);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+@keyframes spin {
+  from {
+    transform: rotate(0);
+  }
+  to {
+    transform: rotate(359deg);
+  }
+}
+@keyframes configure-xclockwise {
+  0% {
+    transform: rotate(45deg);
+  }
+  25% {
+    transform: rotate(-45deg);
+  }
+  50% {
+    transform: rotate(-135deg);
+  }
+  75% {
+    transform: rotate(-225deg);
+  }
+  100% {
+    transform: rotate(-315deg);
+  }
+}
+@keyframes pulse {
+  from {
+    opacity: 1;
+    transform: scale(1);
+  }
+  to {
+    opacity: 0.25;
+    transform: scale(0.75);
+  }
+}
+.popup .circle-border {
+  width: 150px;
+  height: 150px;
+  padding: 3px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  border-radius: 50%;
+  background: rgb(63, 249, 220);
+  background: linear-gradient(0deg, rgba(63, 249, 220, 0.1) 33%, rgb(63, 249, 220) 100%);
+  animation: spin 0.8s linear 0s infinite;
+}
+.popup .circle-core {
+  width: 100%;
+  height: 100%;
+  background-color: #1d2630;
+  border-radius: 50%;
+}
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  font-family: "Lexend Deca", sans-serif;
+}
+
+.App {
+  width: 100%;
+  height: 100%;
+}
+.App .container {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}/*# sourceMappingURL=app.css.map */

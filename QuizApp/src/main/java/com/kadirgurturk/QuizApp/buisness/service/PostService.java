@@ -8,6 +8,7 @@ import com.kadirgurturk.QuizApp.database.PostRespository;
 import com.kadirgurturk.QuizApp.entity.Like;
 import com.kadirgurturk.QuizApp.entity.Post;
 import com.kadirgurturk.QuizApp.entity.User;
+import jakarta.transaction.Transactional;
 import lombok.AllArgsConstructor;
 import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Service;
@@ -16,6 +17,7 @@ import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
+@Transactional
 @Service
 @Lazy
 public class PostService {
