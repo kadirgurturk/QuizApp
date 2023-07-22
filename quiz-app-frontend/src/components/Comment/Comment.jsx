@@ -8,7 +8,7 @@ import Loading from '../Loading/Loading';
 
 export default function Comment({postId}) {
 
-  const { isLoading, data, isError,refetch } = useQuery(`post-comment`, () => {
+  const { isLoading, data, isError, error,refetch } = useQuery(`post-comment`, () => {
     
     return CommentService.getCommentsByPostId(postId)
   });
@@ -21,9 +21,10 @@ export default function Comment({postId}) {
   };
 
   if (isError) {
-    const errorResponse = isError.response;
+    
+    console.log(error);
 
-    if (errorResponse && errorResponse.status === 401) {
+    if (error && error.status === 401) {
       AuthService.refresh();
     }
 

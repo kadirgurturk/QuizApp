@@ -86,7 +86,8 @@ export default function UserActive({val}) {
 
 
   if (userData.isError) {
-    const errorResponse = userData.isError.response;
+    console.log(userData.error);
+    const errorResponse = userData.error.response;
 
     if (errorResponse && errorResponse.status === 401) {
       AuthService.refresh().then(() => {

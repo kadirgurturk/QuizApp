@@ -16,15 +16,18 @@ class AuthService {
         return axios.post(AUTH_URL + "register", registerRequest)
     }
 
-    refresh()
+    refreshToken()
     {
         var refreshRequest = {
             userId : localStorage.getItem("currentUser"),
             refreshToken : localStorage.getItem("refreshToken")
         }
-        return axios.post(AUTH_URL + "refresh", refreshRequest)
+        return axios.post(AUTH_URL + "refresh", refreshRequest).then(res => res.data)
+        .then(rest => { 
+                        
+                        localStorage.setItem("tokenKey",rest.accessToken)
+                      })    
     }
-
 }
 
 export default new AuthService();

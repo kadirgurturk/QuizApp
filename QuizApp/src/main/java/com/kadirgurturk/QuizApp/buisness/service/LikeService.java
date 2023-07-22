@@ -10,6 +10,9 @@ import com.kadirgurturk.QuizApp.entity.Like;
 import com.kadirgurturk.QuizApp.entity.User;
 import jakarta.transaction.Transactional;
 import lombok.AllArgsConstructor;
+import org.springframework.cache.annotation.CacheConfig;
+import org.springframework.cache.annotation.CachePut;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Service;
 
@@ -21,6 +24,7 @@ import java.util.stream.StreamSupport;
 @Transactional
 @Service
 @Lazy
+@CacheConfig(cacheNames = "Like")
 public class LikeService {
 
     private LikeRepository likeRepository;
@@ -33,6 +37,7 @@ public class LikeService {
         this.postService = postService;
     }
 
+    //@Cacheable(value = "likes", key = "#id")
     public List<LikeDto> findAll(Optional<Long> userId, Optional<Long> postId) {
 
         if(userId.isPresent() && postId.isPresent()){
@@ -55,9 +60,8 @@ public class LikeService {
                 .collect(Collectors.toList());
     }
 
+    //@CachePut(value = "likes", key = "#result.id")
     public LikeSave save(LikeSave newLike) {
-
-
 
         var user = userService.findById(newLike.getUser_id());
         var post = postService.findById(newLike.getPost_ıd());

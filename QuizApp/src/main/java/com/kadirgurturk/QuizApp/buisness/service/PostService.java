@@ -10,6 +10,7 @@ import com.kadirgurturk.QuizApp.entity.Post;
 import com.kadirgurturk.QuizApp.entity.User;
 import jakarta.transaction.Transactional;
 import lombok.AllArgsConstructor;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Service;
 
@@ -31,7 +32,7 @@ public class PostService {
         this.userService = userService;
         this.likeService = likeService;
     }
-
+    //@Cacheable(value = "posts", unless = "#result == null or #userId.isPresent()")
     public List<PostDto> findAll(Optional<Long> userId) {
 
         List<Post> posts;

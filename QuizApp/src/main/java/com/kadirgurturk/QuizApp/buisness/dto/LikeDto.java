@@ -17,7 +17,7 @@ public class LikeDto {
 
     public LikeDto(Like entity) {
         id = entity.getId();
-        userId = entity.getPost().getUser().getId();
+        userId = entity.getUser().getId();
         title = entity.getPost().getTitle();
         text = entity.getPost().getText();
         avatarId = entity.getPost().getUser().getAvatar_id();

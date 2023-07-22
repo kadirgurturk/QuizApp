@@ -16,6 +16,7 @@ export default function Navbar() {
 
 
   const Quit = () => {
+    localStorage.removeItem("refreshToken");
     localStorage.removeItem("tokenKey");
     localStorage.removeItem("currentUser");
     localStorage.removeItem("UserName");
