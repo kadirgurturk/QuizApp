@@ -40,35 +40,55 @@ export default function UserActive({val}) {
 
   const client = useQueryClient();
 
-    const addLike = useMutation((newLike)=>{
-       LikeService.createLike(newLike)
-    },{
-        onSuccess : () => {
-            client.invalidateQueries("user-data")
+  const addLike = useMutation((newLike)=>{
+    return LikeService.createLike(newLike)
+    
+ },{
+     onSuccess : () => {
+         client.invalidateQueries("post-data")
+     },
+     onError: (err,variables,context) =>{
+       
+       AuthService.refreshToken()
+       .then(() => {
+         client.invalidateQueries('post-data');
+       })
+       .then(async () => {
+            addLike.mutate(variables) 
+            client.invalidateQueries('post-data');
+       })
+       .catch((err) => {
+         // Token yenileme sırasında oluşabilecek hataları ele al
+         console.log('Token yenileme hatası:', err);
+       });
+   },
+ })
 
-        },
-        onError : (error) =>{
-          if (error?.response?.status === 401) {
-            AuthService.refresh();
-          }
-        }
-    })
+ const deleteLike = useMutation((likeToDelete)=>{
 
-    const deleteLike = useMutation((likeToDelete)=>{
+   return LikeService.deleteByPostIdAndUserId(likeToDelete.user_id,likeToDelete.post_ıd)
 
-      LikeService.deleteByPostIdAndUserId(likeToDelete.user_id,likeToDelete.post_ıd)
+},{
+    onSuccess : () => {
+      
+        client.invalidateQueries("post-data")
+    },
+    onError: (err,variables,context) =>{
 
-   },{
-       onSuccess : () => {
-         
-           client.invalidateQueries("user-data")
-       },
-       onError : (error) =>{
-         if (error?.response?.status === 401) {
-           AuthService.refresh();
-         }
-       }
-   })
+     AuthService.refreshToken()
+     .then(() => {
+       client.invalidateQueries('post-data');
+     })
+     .then(async () => {
+         deleteLike.mutate(variables)  
+          client.invalidateQueries('post-data');
+     })
+     .catch((err) => {
+       // Token yenileme sırasında oluşabilecek hataları ele al
+       console.log('Token yenileme hatası:', err);
+     });
+ },
+})
 
   const navigate = useNavigate();
 
@@ -86,16 +106,23 @@ export default function UserActive({val}) {
 
 
   if (userData.isError) {
-    console.log(userData.error);
-    const errorResponse = userData.error.response;
-
-    if (errorResponse && errorResponse.status === 401) {
-      AuthService.refresh().then(() => {
-       
-      });
+    if (
+      userData.error &&
+      userData.error.response.status === 401 &&
+      !userData.isRefreshing
+    ) {
+      AuthService.refreshToken()
+        .then(() => {
+          client.invalidateQueries('profile-data');
+        })
+        .then(async () => {
+          await userData.refetch();
+        })
+        .catch((error) => {
+          // Token yenileme sırasında oluşabilecek hataları ele al
+          console.error('Token yenileme hatası:', error);
+        });
     }
-
-    return <div>An error occurred while fetching the data.</div>;
   }
 
   const isLiked = (post) =>{

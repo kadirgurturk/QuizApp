@@ -14,40 +14,60 @@ import Loading from '../Loading/Loading'
 export default function Post() {
   const [openId, setOpenId] = useState(null);
 
-  const { isLoading, data, isError } = useQuery(`post-data`, () => {
+  const postData = useQuery(`post-data`, () => {
     return PostService.getAllPosts();
   });
 
   const client = useQueryClient();
 
     const addLike = useMutation((newLike)=>{
-       LikeService.createLike(newLike)
+       return LikeService.createLike(newLike)
        
     },{
         onSuccess : () => {
             client.invalidateQueries("post-data")
         },
-        onError : (error) =>{
-          if (error?.response?.status === 401) {
-            AuthService.refresh();
-          }
-        }
+        onError: (err,variables,context) =>{
+          
+          AuthService.refreshToken()
+          .then(() => {
+            client.invalidateQueries('post-data');
+          })
+          .then(async () => {
+               addLike.mutate(variables) 
+               client.invalidateQueries('post-data');
+          })
+          .catch((err) => {
+            // Token yenileme sırasında oluşabilecek hataları ele al
+            console.log('Token yenileme hatası:', err);
+          });
+      },
     })
 
     const deleteLike = useMutation((likeToDelete)=>{
 
-      LikeService.deleteByPostIdAndUserId(likeToDelete.user_id,likeToDelete.post_ıd)
+      return LikeService.deleteByPostIdAndUserId(likeToDelete.user_id,likeToDelete.post_ıd)
 
    },{
        onSuccess : () => {
          
            client.invalidateQueries("post-data")
        },
-        onError : (error) =>{
-          if (error?.response?.status === 401) {
-            AuthService.refresh();
-          }
-        }
+       onError: (err,variables,context) =>{
+
+        AuthService.refreshToken()
+        .then(() => {
+          client.invalidateQueries('post-data');
+        })
+        .then(async () => {
+            deleteLike.mutate(variables)  
+             client.invalidateQueries('post-data');
+        })
+        .catch((err) => {
+          // Token yenileme sırasında oluşabilecek hataları ele al
+          console.log('Token yenileme hatası:', err);
+        });
+    },
    })
 
   const navigate = useNavigate();
@@ -60,21 +80,10 @@ export default function Post() {
     setOpenId((prevId) => (prevId === id ? null : id));
   };
 
-  if (isLoading || deleteLike.isLoading || addLike.isLoading) {
+  if (postData.isLoading || postData.isRefetching || deleteLike.isLoading || addLike.isLoading) {
     return <Loading/>
   }
 
-  if (isError) {
-    const errorResponse = isError.response;
-
-    if (errorResponse && errorResponse.status === 401) {
-      AuthService.refresh().then(() => {
-         // refresh işleminden sonra veriyi yeniden getir
-      });
-    }
-
-    return <div>An error occurred while fetching the data.</div>;
-  }
 
   const isLiked = (post) =>{
    if(localStorage.getItem("currentUser") != null){
@@ -106,7 +115,7 @@ export default function Post() {
   return (
     <div className="postList">
       {localStorage.getItem("currentUser") != null && <PostForm/>  }
-      {data?.data.map((post) => {
+      {postData.data?.data.map((post) => {
         return (
           <div className="postCard" key={post.id}>
             <div onClick={() => handleClick(post.userId)} className="pp">

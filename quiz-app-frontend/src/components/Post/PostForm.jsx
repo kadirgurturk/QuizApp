@@ -14,22 +14,34 @@ export default function PostForm() {
 
     const client = useQueryClient();
 
-    const {mutate,error,isLoading} = useMutation((newPost)=>{
-        PostService.savePost(newPost)
+    const postMutation = useMutation((newPost)=>{
+        return PostService.savePost(newPost)
         
-    },{
+    },{  
         onSuccess : () => {
             client.invalidateQueries("post-data")
             setTitle("")
             setText("")
-        }
-        ,
-        onError : (error) =>{
-          if (error?.response?.status === 401) {
-            AuthService.refresh();
-          }
-        }
+        },
+
+        onError: (err) =>{
+            AuthService.refreshToken()
+            .then(() => {
+              client.invalidateQueries('post-data');
+            })
+            .then(async () => {
+                 savePost()
+                 client.invalidateQueries('post-data');
+            })
+            .catch((err) => {
+              // Token yenileme sırasında oluşabilecek hataları ele al
+              console.err('Token yenileme hatası:', err);
+            });
+        },
+       
     })
+
+
 
     const savePost = () =>{
 
@@ -41,7 +53,7 @@ export default function PostForm() {
 
         }
 
-        mutate(newPost)
+        postMutation.mutate(newPost)
         changeSent();
     }
 
@@ -51,7 +63,7 @@ export default function PostForm() {
         setTimeout(()=>{ setSent(false)},1500)
     }
     
-    if(isLoading){
+    if(postMutation.isLoading){
         return <Loading/>
       }
 

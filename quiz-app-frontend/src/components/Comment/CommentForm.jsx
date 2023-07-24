@@ -11,20 +11,29 @@ export default function CommentForm({postId}) {
   const [postText,setText] = useState("")
   const client = useQueryClient();
 
-  const {mutate,isLoading} = useMutation((newComment)=>{
+  const commentMutation = useMutation((newComment)=>{
 
-    CommentSerive.saveComment(newComment)
+    return CommentSerive.saveComment(newComment)
 
 },{
     onSuccess : () => {
       client.invalidateQueries("post-comment")
         setText("")
     },
-    onError : (error) =>{
-      if(error.response?.status === 401){
-        AuthService.refresh()
-      }
-    }
+    onError: (err) =>{
+      AuthService.refreshToken()
+      .then(() => {
+        client.invalidateQueries('post-comment');
+      })
+      .then(async () => {
+            addComment();
+           client.invalidateQueries('post-comment');
+      })
+      .catch((err) => {
+        // Token yenileme sırasında oluşabilecek hataları ele al
+        console.err('Token yenileme hatası:', err);
+      });
+  },
 
 })
 
@@ -40,11 +49,11 @@ const addComment = () =>{
       user_id : localStorage.getItem("currentUser"),
   }
     if(postText !== ""){
-      mutate(newComment)
+      commentMutation.mutate(newComment)
     }
 }
 
-if(isLoading){
+if(commentMutation.isLoading){
   return <Loading/>
 }
 

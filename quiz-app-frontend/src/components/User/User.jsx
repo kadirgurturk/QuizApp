@@ -10,7 +10,6 @@ import AuthService from '../../services/AuthService'
 export default function User() {
   const {userId} = useParams();
   const [isOpen,setOpen] = useState(false);
-  const [isRefreshing, setIsRefreshing] = useState(false);
 
   const client = useQueryClient();
 
@@ -18,40 +17,35 @@ export default function User() {
     return UserService.getUserById(userId);
   },{
     cacheTime: 0,
-    
+    staleTime :3000,
   });
 
  
   if (profileData.isLoading ||profileData.isRefetching || profileData.isFetching) {
+  
     return <Loading/>
   }
 
- 
-
-
-  if (profileData.isError) {
-
-    if (profileData.error && profileData.error.response.status === 401 && !profileData.isRefreshing) {
-      setIsRefreshing(true);
-      AuthService.refreshToken().then(() => {
-        
-        client.invalidateQueries('profile-data');     
-      }).then(() => {
-        setIsRefreshing(false);
-      }).catch((error) => {
+if (profileData.isError) {
+  if (
+    profileData.error &&
+    profileData.error.response.status === 401 &&
+    !profileData.isRefreshing
+  ) {
+    AuthService.refreshToken()
+      .then(() => {
+        client.invalidateQueries('profile-data');
+      })
+      .then(async () => {
+        await profileData.refetch();
+      })
+      .catch((error) => {
         // Token yenileme sırasında oluşabilecek hataları ele al
-        setIsRefreshing(false);
         console.error('Token yenileme hatası:', error);
       });
-    }
-    
   }
-
-  useEffect(() => {
-    if (!isRefreshing) {
-      profileData.refetch();
-    }
-  }, [isRefreshing]);
+}
+ 
 
 
   const handlePopup = () =>{
@@ -62,7 +56,7 @@ export default function User() {
     <div className='user'>
         <div className='profile-card'>
           
-            <img className='profile-card-pp' src={require(`../../assets/User/Avatar/avatar${profileData.data?.data.avatar_id}.png`)} alt="sdas" />
+           {profileData.data?.data.avatar_id !== undefined && <img className='profile-card-pp' src={require(`../../assets/User/Avatar/avatar${profileData.data?.data.avatar_id}.png`)} alt="sdas" />}
 
             <h5 className='profile-card-name'>User Name : {profileData.data?.data.userName} </h5>
             
